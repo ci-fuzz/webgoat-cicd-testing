@@ -23,6 +23,8 @@ pipeline {
         TIMEOUT = '900'
   
       }
+    }
+  }
 
   stages {
     stage ('Deploy SUT') {
