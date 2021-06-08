@@ -1,0 +1,7 @@
+POST /WebGoat/xxe/blind HTTP/1.1
+Host: 127.0.0.1:8080
+Content-Length: 2
+Content-Type: application/json
+Jazzer-Internal-Controller-Id: -1084547901
+
+{}

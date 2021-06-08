@@ -1,9 +1,9 @@
 ## The name of the container image used for building the fuzz tests
-build_container: "cifuzz/builders:maven"
+build_container: ""
 
 ## The name of the container image used for running the fuzz tests. If
 ## unspecified, the image of the build container is used.
-run_container: "cifuzz/builders:maven"
+# run_container:
 
 ## A list of source and destination paths. The source paths will be
 ## bind-mounted from the host filesystem to the destination paths in
@@ -18,8 +18,10 @@ build_script: ".code-intelligence/build.sh"
 
 ## Paths to the fuzz tests to execute
 fuzz_tests:
-  - .code-intelligence/fuzz_targets/all_controllers.java
-  - .code-intelligence/fuzz_targets/sql_injection.java
+
+## Paths to web app fuzz target configs
+web_app_target_configs:
+  - .code-intelligence/fuzz_targets/fuzz_test_1.yaml
 
 ## The sanitizers to use for the fuzz tests
 ## By default, only address sanitizer is used.
@@ -39,5 +41,6 @@ runtime: "30m0s"
 
 ## The number of parallel executions per fuzz test
 parallel_executions: 1
+
 ## If true, do not initialize the seed corpus of the fuzz tests.
 # skip_initial_corpus: false

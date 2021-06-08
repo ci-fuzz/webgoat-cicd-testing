@@ -1,0 +1,4 @@
+PUT /WebGoat/challenge/6?email_reg=oo&password_reg=hh&username_reg=kk HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: -1311882766
+

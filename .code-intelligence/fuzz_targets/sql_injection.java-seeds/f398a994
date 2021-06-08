@@ -1,1 +1,0 @@
-{"requests":[{"method":"POST","uri":"/challenge/5?username_login=%FUZZ%\u0026password_login=%FUZZ%","webControllerId":"412316614"}]}

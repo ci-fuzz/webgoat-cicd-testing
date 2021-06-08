@@ -1,0 +1,4 @@
+POST /WebGoat/IDOR/login?password=oo&username=pp HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: 1410744086
+

@@ -1,0 +1,4 @@
+GET /WebGoat/CrossSiteScripting/attack5a?QTY1=ww&QTY2=vv&QTY3=uu&QTY4=bb&field1=kk&field2=jj HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: 63188584
+

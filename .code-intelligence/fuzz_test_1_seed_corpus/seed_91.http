@@ -1,0 +1,4 @@
+POST /WebGoat/SqlInjectionAdvanced/quiz?question_0_solution=ee&question_1_solution=pp&question_2_solution=ee&question_3_solution=xx&question_4_solution=ss HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: -1986728249
+

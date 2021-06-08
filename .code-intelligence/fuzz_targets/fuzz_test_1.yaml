@@ -1,0 +1,13 @@
+## The fuzz target type. If unspecified, the type is deduced from the
+## extension of the fuzz target source file.
+type: "java web app"
+
+## Additional arguments to pass to the fuzz target when it is executed
+# run_extra_args:
+
+## List of web services fuzzed as part of this fuzz target
+web_services:
+  - "webgoat"
+
+## Base URL of the application under test
+# base_url: "http://127.0.0.1:8080"

@@ -1,0 +1,4 @@
+POST /WebGoat/SqlInjectionAdvanced/attack6a?userid_6a=pp HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: 382516853
+

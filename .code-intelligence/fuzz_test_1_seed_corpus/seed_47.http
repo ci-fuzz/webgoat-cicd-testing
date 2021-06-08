@@ -1,0 +1,4 @@
+POST /WebGoat/CrossSiteScripting/attack1?answer_xss_1=kk HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: -1494777911
+

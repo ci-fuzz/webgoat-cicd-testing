@@ -1,0 +1,4 @@
+POST /WebGoat/HttpBasics/attack2?answer=pp&magic_answer=jj&magic_num=hh HTTP/1.1
+Host: 127.0.0.1:8080
+Jazzer-Internal-Controller-Id: -1495008101
+
