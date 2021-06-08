@@ -1,10 +1,12 @@
 pipeline {
   agent any
   stages {
-    stage ('Deploy webgoat') {
+    stage ('Deploy') {
       mvn clean install -DskipTests
       java -javaagent:$HOME/bin/fuzzing_agent_deploy.jar=instrumentation_includes="org.owasp.**",service_name=projects/webgoat-7ccae1b8/web_services/webgoat -jar ./webgoat-server/target/webgoat-server-8.0.0-SNAPSHOT.jar
     }
+  }
+  stages {
     stage ('Prepare fuzz test') {
       environment {
         // Name of the project to fuzz
