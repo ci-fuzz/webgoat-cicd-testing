@@ -15,16 +15,14 @@ pipeline {
 
         // Credentials for accessing the fuzzing service
         CI_FUZZ_API_TOKEN = credentials('CI_FUZZ_API_TOKEN')
-        CICTL = "${WORKSPACE}/cictl-3.1.1-linux";
-        CICTL_VERSION = 'cictl-3.1.1';
+        CICTL = "${WORKSPACE}/cictl-cictl-cictl-3.1.1-linux";
+        CICTL_VERSION = 'cictl-cictl-3.1.1';
         CICTL_SHA256SUM = '96118aa6a89a8a2dfe325ec204f1276d6c4144ecc66f8f0a6f38e359a20a1152';
-        CICTL_URL = 'https://s3.eu-central-1.amazonaws.com/public.code-intelligence.com/cictl/cictl-3.1.1-linux';
+        CICTL_URL = 'https://s3.eu-central-1.amazonaws.com/public.code-intelligence.com/cictl/cictl-cictl-cictl-3.1.1-linux';
         FINDINGS_TYPE = 'CRASH';
         TIMEOUT = '900'
   
       }
-    }
-  }
 
       stages {
         stage ('Deploy SUT') {
