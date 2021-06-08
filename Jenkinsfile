@@ -25,12 +25,12 @@ pipeline {
       }
 
   stages {
-    stage ('Download cictl') {
+    stage ('Deploy SUT') {
       steps {
         sh '''
           mvn clean install -DskipTests
           java -javaagent:$HOME/bin/fuzzing_agent_deploy.jar=instrumentation_includes="org.owasp.**",service_name=projects/webgoat-7ccae1b8/web_services/webgoat -jar ./webgoat-server/target/webgoat-server-8.0.0-SNAPSHOT.jar
-           '''
+        '''
       }
     }
   }
