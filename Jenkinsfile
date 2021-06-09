@@ -73,8 +73,7 @@ pipeline {
               
               # Start fuzzing.
               CAMPAIGN_RUN=$(${CICTL} start \\
-		-f=projects/73848196_github_webgoat-cicd-testing-0c6c30b1/fuzz_targets/LmNvZGUtaW50ZWxsaWdlbmNlL2Z1enpfdGFyZ2V0cy9mdXp6X3Rlc3RfMQ== \\
-           	--server="${FUZZING_SERVER_URL}" \\
+           	    --server="${FUZZING_SERVER_URL}" \\
                 --report-email="${REPORT_EMAIL:-}" \\
                 --git-branch="${GIT_BRANCH}" \\
                 --commit-sha="${CI_COMMIT_SHA:-}" \\
