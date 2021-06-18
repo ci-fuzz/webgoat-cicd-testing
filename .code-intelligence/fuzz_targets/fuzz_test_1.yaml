@@ -10,4 +10,4 @@ web_services:
   - "webgoat"
 
 ## Base URL of the application under test
-base_url: "http://jenkins.demo.code-intelligence.com:8080"
+base_url: "http://jenkins.demo.code-intelligence.com:8081"
