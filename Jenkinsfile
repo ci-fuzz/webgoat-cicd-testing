@@ -6,34 +6,21 @@ pipeline {
         // Name of the project to fuzz
         PROJECT_NAME = 'projects/73848196_github_webgoat-cicd-testing-0c6c30b1'
         // Address of the fuzzing service
-        FUZZING_SERVER_URL = 'server-installer-test.code-intelligence.com:6773'
+        FUZZING_SERVER_URL = 'app.fuzz.ci:6773'
         // Address of the fuzzing web interface
-        WEB_APP_ADDRESS =  'https://server-installer-test.code-intelligence.com'
-
-        // The git branch to use for the fuzz test
-        GIT_BRANCH = 'master'
+        WEB_APP_ADDRESS =  'https://app.fuzz.ci'
 
         // Credentials for accessing the fuzzing service
         CI_FUZZ_API_TOKEN = credentials('CI_FUZZ_API_TOKEN')
-        CICTL = "${WORKSPACE}/cictl-3.2.1-linux";
-        CICTL_VERSION = '3.2.1';
-        CICTL_SHA256SUM = '0ab873f5e11f79001cacda1b64edb27453fb13acc9475a945f54b61bd331f223';
-        CICTL_URL = 'https://s3.eu-central-1.amazonaws.com/public.code-intelligence.com/cictl/cictl-3.2.1-linux';
+        CICTL = "${WORKSPACE}/cictl-3.4.0-linux";
+        CICTL_VERSION = '3.4.0';
+        CICTL_URL = 'https://s3.eu-central-1.amazonaws.com/public.code-intelligence.com/cictl/cictl-3.4.0-linux';
         FINDINGS_TYPE = 'CRASH';
         TIMEOUT = '900'
   
       }
 
       stages {
-        stage ('Deploy SUT') {
-          steps {
-            sh '''
-              mvn clean install -DskipTests
-              java -javaagent:$HOME/bin/fuzzing_agent_deploy.jar=instrumentation_includes="org.owasp.**",service_name=projects/webgoat-7ccae1b8/web_services/webgoat,fuzzing_server_host=server-installer-test.code-intelligence.com -jar ./webgoat-server/target/webgoat-server-8.0.0-SNAPSHOT.jar &
-            '''
-          }
-        }
-        
         stage ('Download cictl') {
           steps {
             sh '''
@@ -41,12 +28,8 @@ pipeline {
 
               # Download cictl if it doesn't exist already
               if [ ! -f "${CICTL}" ]; then
-                curl "${CICTL_URL}" -o "${CICTL}"
+                curl -L "${CICTL_URL}" -o "${CICTL}"
               fi
-
-              # Verify the checksum
-              echo "${CICTL_SHA256SUM} "${CICTL}"" | sha256sum --check
-
               # Make it executable
               chmod +x "${CICTL}"
             '''
@@ -65,18 +48,22 @@ pipeline {
               # Log in
               echo "${CI_FUZZ_API_TOKEN}" | $CICTL --server="${FUZZING_SERVER_URL}" login --quiet
 
-              # $CI_COMMIT_SHA may be specified in the jenkins pipeline,
+              # $CI_COMMIT_SHA may be specified in the Jenkins pipeline,
               # or, if using the Git plugin, $GIT_COMMIT could be used.
               if [ -z "${CI_COMMIT_SHA:-}" ]; then
                 CI_COMMIT_SHA=${GIT_COMMIT:-}
               fi
               
+              # In a Jenkins multibranch pipeline run for a pull request,
+              # $CHANGE_BRANCH contains the actual branch name. If not set,
+              # we fall back to $GIT_BRANCH, which is set by the Git plugin.
+              CI_GIT_BRANCH=${CHANGE_BRANCH:-${GIT_BRANCH:-}}
+
               # Start fuzzing.
               CAMPAIGN_RUN=$(${CICTL} start \\
-		-f=projects/73848196_github_webgoat-cicd-testing-0c6c30b1/fuzz_targets/LmNvZGUtaW50ZWxsaWdlbmNlL2Z1enpfdGFyZ2V0cy9mdXp6X3Rlc3RfMQ== \\
-           	--server="${FUZZING_SERVER_URL}" \\
+                --server="${FUZZING_SERVER_URL}" \\
                 --report-email="${REPORT_EMAIL:-}" \\
-                --git-branch="${GIT_BRANCH}" \\
+                --git-branch="${CI_GIT_BRANCH:-}" \\
                 --commit-sha="${CI_COMMIT_SHA:-}" \\
                 "${PROJECT_NAME}")
 
@@ -134,9 +121,17 @@ pipeline {
         JQ_URL=https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
         JQ_CHECKSUM=af986793a515d500ab2d35f8d2aecd656e764504b789b66d7e1a0b727a124c44
 
-        # Download jq if it doesn't exist
-        if [ ! -f "${JQ}" ]; then
-          curl "${JQ_URL}" -o "${JQ}"
+        # Check if jq already exists
+        if [ -f "${JQ}" ]; then
+          # The file already exists. Verify the checksum.
+          if ! echo "${JQ_CHECKSUM}" "${JQ}" | sha256sum --check; then
+            # The checksum of the existing file doesn't match. Download
+            # it again.
+            curl -L "${JQ_URL}" -o "${JQ}"
+          fi
+        else
+        # The file doesn't exist yet, download it
+          curl -L "${JQ_URL}" -o "${JQ}"
         fi
 
         # Verify the checksum
