@@ -27,7 +27,7 @@ jobs:
         name: Fuzzing
         uses: CodeIntelligenceTesting/github-actions/monitor-fuzzing@v3
         with:
-          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
+          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN_APP_FUZZ_CI_DEMO }}
           test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pull_request_number: ${{ github.event.pull_request.number }}
@@ -40,7 +40,7 @@ jobs:
         uses: CodeIntelligenceTesting/github-actions/report-coverage@v3
         if: ${{ github.event_name == 'pull_request' && (success() || failure()) }}
         with:
-          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
+          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN_APP_FUZZ_CI_DEMO }}
           test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pull_request_number: ${{ github.event.pull_request.number }}
