@@ -4,7 +4,7 @@ pipeline {
     stage ('Prepare fuzz test') {
       environment {
         // Name of the project to fuzz
-        PROJECT_NAME = 'projects/organizations_e8e220a583790aa9_webgoat_git-95e1f92d'
+        PROJECT_NAME = 'projects/organizations_e8e220a583790aa9_webgoat-cicd-testing-0c6c30b1'
         // Address of the fuzzing service
         FUZZING_SERVER_URL = 'app.fuzz.ci:6773'
         // Address of the fuzzing web interface
