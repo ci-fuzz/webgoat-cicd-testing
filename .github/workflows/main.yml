@@ -1,4 +1,4 @@
-name: CI
+name: CI Fuzz
 
 on:
   push:
@@ -7,87 +7,46 @@ on:
     branches: [ master ]
 
 env:
-  PROJECT_NAME: WebGoat  
+  FUZZING_SERVER_ADDRESS: app.fuzz.ci:6773
+  WEB_APP_ADDRESS:  https://app.fuzz.ci
+
 
 jobs:
-  fuzz_default_campaign:
+  fuzz_tests:
     runs-on: ubuntu-latest
     steps:
       - id: start-fuzzing
         name: Build and Instrument
-        uses: CodeIntelligenceTesting/github-actions/start-fuzzing@master
+        uses: CodeIntelligenceTesting/github-actions/start-fuzzing@v3
         with:
-          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
-          project: ${{ env.PROJECT_NAME }}
-          test_collection: "default_campaign"
-          git_reference: ${{ github.sha }}          
-          fuzzing_server_address: grpc-api.demo.code-intelligence.com:443
+          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN_APP_FUZZ_CI_DEMO }}
+          project: "projects/organizations_e8e220a583790aa9_webgoat-cicd-testing-0c6c30b1"
+          git_reference: ${{ github.sha }}
+          fuzzing_server_address: ${{ env.FUZZING_SERVER_ADDRESS }}
       - id: monitor-fuzzing
         name: Fuzzing
-        uses: CodeIntelligenceTesting/github-actions/monitor-fuzzing@master
+        uses: CodeIntelligenceTesting/github-actions/monitor-fuzzing@v3
         with:
           ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
-          project: ${{ env.PROJECT_NAME }}
-          test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run_display_name }}
+          test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pull_request_number: ${{ github.event.pull_request.number }}
           owner: ${{ github.event.repository.owner.login }}
           repository: ${{ github.event.repository.name }}
-          fuzzing_server_address: grpc-api.demo.code-intelligence.com:443
-          dashboard_address: https://app.demo.code-intelligence.com
+          fuzzing_server_address: ${{ env.FUZZING_SERVER_ADDRESS }}
+          dashboard_address: ${{ env.WEB_APP_ADDRESS }}
       - id: report-coverage
         name: Report Coverage
-        uses: CodeIntelligenceTesting/github-actions/report-coverage@master
+        uses: CodeIntelligenceTesting/github-actions/report-coverage@v3
         if: ${{ github.event_name == 'pull_request' && (success() || failure()) }}
         with:
           ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
-          project: ${{ env.PROJECT_NAME }}
-          test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run_resource_name }}
+          test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           pull_request_number: ${{ github.event.pull_request.number }}
           owner: ${{ github.event.repository.owner.login }}
           repository: ${{ github.event.repository.name }}
           git_reference: ${{ github.sha }}
-          fuzzing_server_address: grpc-api.demo.code-intelligence.com:443
-          dashboard_address: https://app.demo.code-intelligence.com
-  fuzz_all_controllers_campaign:
-    runs-on: ubuntu-latest
-    steps:
-      - id: start-fuzzing
-        name: Build and Instrument
-        uses: CodeIntelligenceTesting/github-actions/start-fuzzing@master
-        with:
-          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
-          project: ${{ env.PROJECT_NAME }}
-          test_collection: "all_controllers"
-          git_reference: ${{ github.sha }}          
-          fuzzing_server_address: grpc-api.demo.code-intelligence.com:443
-      - id: monitor-fuzzing
-        name: Fuzzing
-        uses: CodeIntelligenceTesting/github-actions/monitor-fuzzing@master
-        with:
-          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
-          project: ${{ env.PROJECT_NAME }}
-          test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run_display_name }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pull_request_number: ${{ github.event.pull_request.number }}
-          owner: ${{ github.event.repository.owner.login }}
-          repository: ${{ github.event.repository.name }}
-          fuzzing_server_address: grpc-api.demo.code-intelligence.com:443
-          dashboard_address: https://app.demo.code-intelligence.com
-      - id: report-coverage
-        name: Report Coverage
-        uses: CodeIntelligenceTesting/github-actions/report-coverage@master
-        if: ${{ github.event_name == 'pull_request' && (success() || failure()) }}
-        with:
-          ci_fuzz_api_token: ${{ secrets.CI_FUZZ_API_TOKEN }}
-          project: ${{ env.PROJECT_NAME }}
-          test_collection_run: ${{ steps.start-fuzzing.outputs.test_collection_run_resource_name }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pull_request_number: ${{ github.event.pull_request.number }}
-          owner: ${{ github.event.repository.owner.login }}
-          repository: ${{ github.event.repository.name }}
-          git_reference: ${{ github.sha }}
-          fuzzing_server_address: grpc-api.demo.code-intelligence.com:443
-          dashboard_address: https://app.demo.code-intelligence.com
+          fuzzing_server_address: ${{ env.FUZZING_SERVER_ADDRESS }}
+          dashboard_address: ${{ env.WEB_APP_ADDRESS }}
           
