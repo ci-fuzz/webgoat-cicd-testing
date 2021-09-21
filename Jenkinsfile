@@ -4,14 +4,14 @@ pipeline {
     stage ('Prepare fuzz test') {
       environment {
         // Name of the project to fuzz
-        PROJECT_NAME = 'projects/73848196_github_webgoat-cicd-testing-0c6c30b1'
+        PROJECT_NAME = 'projects/organizations_e8e220a583790aa9_webgoat_git-95e1f92d'
         // Address of the fuzzing service
         FUZZING_SERVER_URL = 'app.fuzz.ci:6773'
         // Address of the fuzzing web interface
         WEB_APP_ADDRESS =  'https://app.fuzz.ci'
 
         // Credentials for accessing the fuzzing service
-        CI_FUZZ_API_TOKEN = credentials('CI_FUZZ_API_TOKEN')
+        CI_FUZZ_API_TOKEN = credentials('CI_FUZZ_API_TOKEN_APP_FUZZ_CI_DEMO')
         CICTL = "${WORKSPACE}/cictl-3.4.0-linux";
         CICTL_VERSION = '3.4.0';
         CICTL_URL = 'https://s3.eu-central-1.amazonaws.com/public.code-intelligence.com/cictl/cictl-3.4.0-linux';
