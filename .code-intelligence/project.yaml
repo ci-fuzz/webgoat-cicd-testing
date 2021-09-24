@@ -59,7 +59,7 @@ sanitizers:
 
 ## The run time after which the fuzz tests are cancelled and
 ## considered as having passed. The default is 30 minutes.
-runtime: "5m0s"
+max_runtime: "5m0s"
 
 ## The number of parallel executions per fuzz test. The default is 1,
 ## which means for each combination of fuzzing engine and sanitizer,
